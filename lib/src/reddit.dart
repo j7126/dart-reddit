@@ -1,7 +1,7 @@
 part of reddit;
 
 class Reddit {
-  static final Uri _BASE_API_URI_PUBLIC = Uri.parse("http://www.reddit.com/");
+  static final Uri _BASE_API_URI_PUBLIC = Uri.parse("https://www.reddit.com/");
   static final Uri _BASE_API_URI_OAUTH2 =
       Uri.parse("https://oauth.reddit.com/");
 
