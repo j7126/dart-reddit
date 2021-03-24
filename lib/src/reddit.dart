@@ -80,7 +80,7 @@ class Reddit {
    * Using OAuth will be required after August 3, 2015:
    * https://www.reddit.com/r/redditdev/comments/2ujhkr/important_api_licensing_terms_clarified/
    */
-  void authSetup(String identifier, String secret) {
+  void authSetup(String identifier, {String secret}) {
     if (_grant != null)
       throw new StateError("Should not call this method twice");
     if (_oauthEnabled) throw new StateError("OAuth2 is already enabled");
@@ -129,7 +129,7 @@ class Reddit {
    * The Reddit instance provided by the Future, is the same as the instance this method is invoked on.
    */
   Future<Reddit> authFinish(
-      {Map response, String code, String username, String password}) async {
+      {String deviceId, Map response, String code, String username, String password}) async {
     if (_grant == null) throw new StateError("Should first call setupOAuth2");
     if (_oauthEnabled) throw new StateError("OAuth2 is already enabled");
 
@@ -150,7 +150,8 @@ class Reddit {
           _TOKEN_ENDPOINT.replace(
               userInfo: "${_grant.identifier}:${_grant.secret}"),
           body: {
-            "grant_type": "client_credentials",
+            "grant_type": deviceId == null ? "client_credentials" : "https://oauth.reddit.com/grants/installed_client",
+            "device_id": deviceId == null ? "" : deviceId,
             "username": username == null ? "" : username,
             "password": password == null ? "" : password,
             "duration": "permanent"
